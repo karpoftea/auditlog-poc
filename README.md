@@ -21,7 +21,7 @@ curl -XPUT -H 'Content-type: application/json' \
  http://localhost:8083/connectors/auditlog-connector/config -d@src/main/connect/register-auditlog.json
 ```
 , then generate some events using service REST-API and see results in auditlog Kafka topic. 
-See [Common queries](#Common queries) for details.
+See [Common queries](#Common-queries) for details.
 
 # Common queries
 
