@@ -1,0 +1,66 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:15.1
+#    network_mode: bridge
+    container_name: postgres
+#    hostname: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_USER=books-svc
+      - POSTGRES_DB=booksdb
+    command: [ "postgres", "-c", "wal_level=logical" ]
+    restart: unless-stopped
+  zookeeper:
+    image: quay.io/debezium/zookeeper:2.0
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+  kafka:
+    image: quay.io/debezium/kafka:2.0
+    ports:
+      - 9092:9092
+    links:
+      - zookeeper
+    environment:
+      - ZOOKEEPER_CONNECT=zookeeper:2181
+  connect:
+    image: debezium/strimzi-connect
+    build:
+      context: debezium-strimzi
+      args:
+        DEBEZIUM_CONNECTOR_VERSION: "${DEBEZIUM_CONNECTOR_VERSION:-2.0.0.Final}"
+        STRIMZI_VERSION: "${STRIMZI_VERSION:-latest-kafka-3.3.1}"
+    ports:
+      - 8083:8083
+    links:
+      - kafka
+      - postgres
+    environment:
+      - KAFKA_LOG4J_OPTS=-Dlog4j.configuration=file:/opt/kafka/config/connect-log4j.properties
+      - KAFKA_CONNECT_BOOTSTRAP_SERVERS=kafka:9092
+      - |
+        KAFKA_CONNECT_CONFIGURATION=
+        key.converter=org.apache.kafka.connect.json.JsonConverter
+        value.converter=org.apache.kafka.connect.json.JsonConverter
+        key.converter.schemas.enable=false
+        value.converter.schemas.enable=false
+        group.id=connect
+        offset.storage.topic=connect-offsets
+        offset.storage.replication.factor=1
+        config.storage.topic=connect-configs
+        config.storage.replication.factor=1
+        status.storage.topic=connect-status
+        status.storage.replication.factor=1
+        consumer.interceptor.classes=io.opentracing.contrib.kafka.TracingConsumerInterceptor
+        producer.interceptor.classes=io.opentracing.contrib.kafka.TracingProducerInterceptor
+    command: /opt/kafka/kafka_connect_run.sh
+volumes:
+  postgres-data:
