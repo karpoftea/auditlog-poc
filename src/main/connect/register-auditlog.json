@@ -7,7 +7,6 @@
   "database.password": "secret",
   "database.dbname" : "booksdb",
   "topic.prefix": "acme.",
-  "schema.include.list": "public",
   "table.include.list" : "public.auditlog",
   "tombstones.on.delete" : "false",
   "transforms" : "outbox",

@@ -14,3 +14,11 @@
 
 # enhancements
 - make column auditlog.created numeric
+- publish auditlog table to enable replication (https://debezium.io/documentation/reference/stable/connectors/postgresql.html#postgresql-replication-user-privileges)
+  - use specific user for debezium
+- set `payload` column type to `jsonb`
+- set `id` column type to `uuid`
+- add book-service to docker compose
+- extract book-service to submodule
+- make authors service as submodule
+- add authors-service to docker compose 
