@@ -1,10 +1,12 @@
-package org.acme.auditlogpoc;
+package org.acme.auditlogpoc.listener;
 
 import javax.persistence.PostPersist;
 import javax.persistence.PostRemove;
 import javax.persistence.PostUpdate;
 
 import lombok.extern.slf4j.Slf4j;
+import org.acme.auditlogpoc.AuditEvent;
+import org.acme.auditlogpoc.Identifiable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;

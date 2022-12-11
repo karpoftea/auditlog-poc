@@ -28,17 +28,20 @@ See [Common queries](#Common-queries) for details.
 ## Application REST-API
 ```shell
 
-# create
+# create book
 curl -v -XPOST -H 'Content-type: application/json' http://localhost:8080 -d '{"isbn": "42", "title": "My 1st book"}'
 
-# get
+# get book
 curl -v -XGET http://localhost:8080/1
 
-# update
+# update book
 curl -v -XPUT -H 'Content-type: application/json' http://localhost:8080/1 -d '{"isbn": "23", "title": "A book"}'
 
-# delete
+# delete book
 curl -v -XDELETE http://localhost:8080/1
+
+# create author
+curl -v -XPOST -H 'Content-type: application/json' http://localhost:8080/authors -d '{"name": "Gogol"}'
 ```
 
 ## Kafka-Connect REST-API

@@ -1,10 +1,12 @@
-package org.acme.auditlogpoc;
+package org.acme.auditlogpoc.listener;
 
 import javax.persistence.EntityManager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.acme.auditlogpoc.AuditEvent;
+import org.acme.auditlogpoc.AuditLogRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
